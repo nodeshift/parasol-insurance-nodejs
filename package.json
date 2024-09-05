@@ -25,7 +25,6 @@
     "fastify": "^4.28.1",
     "fastify-plugin": "^4.5.1",
     "langchain": "^0.2.10",
-    "sqlite3": "^5.1.7",
-    "ws": "^8.18.0"
+    "sqlite3": "^5.1.7"
   }
 }
