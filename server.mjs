@@ -9,14 +9,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 import claimsRoute from './routes/claims-route.mjs';
+import chatbotWSRoute from './routes/chatbot-ws-route.mjs';
 import sqliteConnector from './plugins/db/sqlite-connector.mjs';
 
-import { getModel, createChain, answerQuestion, resetSessions } from './ai/ai.mjs';
-
+// Setup Logging
 const fastify = Fastify({
   logger: true
 });
 
+// Register the Fastify ENV plugin for reading the .env files
 await fastify.register(fastifyEnv, {
   schema: {
     type: 'object'
@@ -24,6 +25,7 @@ await fastify.register(fastifyEnv, {
   dotenv: true
 });
 
+// WebUI related setup and serving
 const webuiLocation = '../parasol-insurance/app/src/main/webui/dist';
 
 fastify.register(fastifyStatic, {
@@ -33,65 +35,14 @@ fastify.register(fastifyStatic, {
 
 fastify.get('/*', (req, res) => {
   res.send(fs.createReadStream(path.join(__dirname, webuiLocation, 'index.html')));
-})
-
-fastify.register(sqliteConnector);
-fastify.register(claimsRoute);
-fastify.register(fastifyWebsocket);
-fastify.register(async function (fastify) {
-  fastify.get('/ws/query', { websocket: true }, (ws, req) => {
-    const controller = new AbortController();
-
-    ws.on('close', () => {
-      resetSessions(ws);
-      controller.abort();
-      console.log('connection closed');
-    });
-
-    ws.on('error', console.error);
-
-    ws.on('message', async (data) => {
-      const stringData = data.toString();
-
-      // This should be JSON
-      let JSONmessage;
-      try {
-        JSONmessage = JSON.parse(stringData);
-      } catch(err) {
-        console.log(err);
-      }
-
-      console.log('Query from the Client', JSONmessage);
-
-      console.log('Starting to Ask', new Date());
-
-      try {
-        const answerStream = await answerQuestion(JSONmessage, ws);
-
-        for await (const chunk of answerStream) {
-          console.log(`Got Chat Response: ${chunk.content}`);
-
-          //'{"type":"token","token":" Hello","source":""}'
-          const formattedAnswer = {
-            type: 'token',
-            token: chunk.content,
-            source: ''
-          };
-
-          ws.send(JSON.stringify(formattedAnswer));
-        }
-      } catch (err) {
-        console.log(err);
-      }
-
-      console.log('Done Asking', new Date());
-    });
-
-    // AI Related Setup
-    const model = getModel().bind({ signal: controller.signal });
-    createChain(model);
-  });
 });
+
+// Register plugins and Routes
+fastify.register(sqliteConnector);
+fastify.register(fastifyWebsocket);
+
+fastify.register(claimsRoute);
+fastify.register(chatbotWSRoute);
 
 /**
  * Run the server!
