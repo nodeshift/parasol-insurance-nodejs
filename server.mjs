@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 import claimsRoute from './routes/claims-route.mjs';
 import sqliteConnector from './plugins/db/sqlite-connector.mjs';
 
-import { getModel, createChain, answerQuestion, resetSessions } from './ai.mjs';
+import { getModel, createChain, answerQuestion, resetSessions } from './ai/ai.mjs';
 
 const fastify = Fastify({
   logger: true
