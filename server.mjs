@@ -8,8 +8,8 @@ import fs from 'node:fs';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-import claimsRoute from './claims-route.mjs';
-import sqliteConnector from './sqlite-connector.mjs';
+import claimsRoute from './routes/claims-route.mjs';
+import sqliteConnector from './plugins/db/sqlite-connector.mjs';
 
 import { getModel, createChain, answerQuestion, resetSessions } from './ai.mjs';
 
