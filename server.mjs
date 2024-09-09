@@ -10,6 +10,7 @@ const __dirname = path.dirname(__filename);
 
 import claimsRoute from './routes/claims-route.mjs';
 import chatbotWSRoute from './routes/chatbot-ws-route.mjs';
+import emailRoute from './routes/email-route.mjs';
 import sqliteConnector from './plugins/db/sqlite-connector.mjs';
 
 // Setup Logging
@@ -43,6 +44,7 @@ fastify.register(fastifyWebsocket);
 
 fastify.register(claimsRoute);
 fastify.register(chatbotWSRoute);
+fastify.register(emailRoute);
 
 /**
  * Run the server!
