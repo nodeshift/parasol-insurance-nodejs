@@ -3,7 +3,9 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+import { RunnableWithMessageHistory } from '@langchain/core/runnables';
 import { ChatPromptTemplate, MessagesPlaceholder } from "@langchain/core/prompts";
+import { ChatMessageHistory } from 'langchain/stores/message/in_memory';
 
 import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
 import { PDFLoader } from '@langchain/community/document_loaders/fs/pdf';
@@ -11,9 +13,10 @@ import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { MemoryVectorStore } from 'langchain/vectorstores/memory';
 import {HuggingFaceTransformersEmbeddings} from '@langchain/community/embeddings/hf_transformers';
 import { createRetrievalChain } from 'langchain/chains/retrieval';
+import { create } from 'node:domain';
 
 let sessions = {};
-let retrievalChain;
+let chainWithHistory;
 
 export async function createChain(model) {
   // Parse Docs
@@ -36,8 +39,8 @@ export async function createChain(model) {
 
   const retriever = vectorStore.asRetriever();
 
-  // ////////////////////////////////
-  // // Create RAG Chain
+  //////////////////////////////
+  // CREATE CHAIN
 
   const prompt = ChatPromptTemplate.fromMessages([
     [ 'system',
@@ -49,6 +52,7 @@ export async function createChain(model) {
       'Don\'t make up policy term limits by yourself' +
       'Context: {context}'
     ],
+    new MessagesPlaceholder('history'),
     [ 'human', '{input}' ]
   ]);
 
@@ -57,16 +61,30 @@ export async function createChain(model) {
     prompt
   });
 
-  retrievalChain = await createRetrievalChain({
+  const retrievalChain = await createRetrievalChain({
     combineDocsChain: ragChain,
     retriever
   });
+
+  chainWithHistory = new RunnableWithMessageHistory({
+    runnable: retrievalChain,
+    getMessageHistory: (sessionId) => {
+      if (sessions[sessionId] === undefined) {
+        sessions[sessionId] = new ChatMessageHistory();
+      }
+      return sessions[sessionId];
+    },
+    inputMessagesKey: 'input',
+    historyMessagesKey: 'history',
+  });
+
 }
 
 export async function answerQuestion(question, sessionId) {
-  const result = await retrievalChain.stream({
-    input: createQuestion(question)
-  });
+  const result = await chainWithHistory.stream(
+    { input: createQuestion(question) },
+    { configurable: { sessionId: sessionId } }
+  );
 
   return result;
 }
