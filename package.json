@@ -22,7 +22,7 @@
     "@fastify/static": "^7.0.4",
     "@fastify/websocket": "^10.0.1",
     "@langchain/core": "^0.2.32",
-    "fastify": "^4.28.1",
+    "fastify": "^5.0.0",
     "fastify-plugin": "^4.5.1",
     "langchain": "^0.3.2",
     "sqlite3": "^5.1.7"
