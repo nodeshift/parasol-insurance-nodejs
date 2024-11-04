@@ -24,7 +24,7 @@
     "@langchain/core": "^0.2.32",
     "fastify": "^4.28.1",
     "fastify-plugin": "^4.5.1",
-    "langchain": "^0.3.2",
+    "langchain": "^0.3.3",
     "sqlite3": "^5.1.7"
   }
 }
