@@ -42,6 +42,12 @@ First clone the webui from here:
 git clone https://github.com/rh-rad-ai-roadshow/parasol-insurance.git
 ```
 
+Switch to the email feature branch:
+
+```
+git checkout -b email-feature-branch
+```
+
 ### Build the WebUI
 
 In the Node.js Application Repo(this repo) run the `buildui` npm script
