@@ -52,7 +52,7 @@ export function resetSessions(sessionId) {
 function createQuestion(rawQuestion) {
   return `Claim ID: ${rawQuestion.claimId}
 
-  Claim Inception Date: ${rawQuestion.inceptionDate}
+  Policy Inception Date: ${rawQuestion.inceptionDate}
 
   Claim Summary:
 
