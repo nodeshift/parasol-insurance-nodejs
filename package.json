@@ -18,7 +18,7 @@
     "node": "^18 || ^20 || ^22"
   },
   "dependencies": {
-    "@fastify/env": "^4.4.0",
+    "@fastify/env": "^5.0.1",
     "@fastify/static": "^7.0.4",
     "@fastify/websocket": "^10.0.1",
     "@langchain/core": "^0.2.32",
