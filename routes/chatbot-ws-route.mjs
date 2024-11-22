@@ -1,13 +1,13 @@
 import { getModel } from '../ai/ai.mjs';
-import {  createChain, answerQuestion, resetSessions } from '../ai/chatbot.mjs';
+import {  createChain, answerQuestion } from '../ai/chatbot-with-tools.mjs';
 
 async function chatbotWSRoute (fastify, options) {
   fastify.get('/ws/query', { websocket: true }, (ws, req) => {
     const controller = new AbortController();
 
     ws.on('close', () => {
-      resetSessions(ws);
-      controller.abort();
+     //  resetSessions(ws);
+     //  controller.abort();
       console.log('connection closed');
     });
 
@@ -31,18 +31,25 @@ async function chatbotWSRoute (fastify, options) {
       try {
         const answerStream = await answerQuestion(JSONmessage, ws);
 
-        for await (const chunk of answerStream) {
-          console.log(`Got Chat Response: ${chunk.answer}`);
+        const formattedAnswer = {
+          type: 'token',
+          token: answerStream.content,
+          source: ''
+        };
+        ws.send(JSON.stringify(formattedAnswer));
 
-          //'{"type":"token","token":" Hello","source":""}'
-          const formattedAnswer = {
-            type: 'token',
-            token: chunk.answer,
-            source: ''
-          };
+        // for await (const chunk of answerStream) {
+        //   console.log(`Got Chat Response: ${chunk.answer}`);
 
-          ws.send(JSON.stringify(formattedAnswer));
-        }
+        //   //'{"type":"token","token":" Hello","source":""}'
+        //   const formattedAnswer = {
+        //     type: 'token',
+        //     token: chunk.answer,
+        //     source: ''
+        //   };
+
+        //   ws.send(JSON.stringify(formattedAnswer));
+        // }
       } catch (err) {
         console.log(err);
       }
@@ -51,8 +58,9 @@ async function chatbotWSRoute (fastify, options) {
     });
 
     // AI Related Setup
-    const model = getModel().bind({ signal: controller.signal });
-    createChain(model);
+    // TODO: Bind tools
+    const model = getModel(); //.bind({ signal: controller.signal });
+    createChain(model, fastify);
   });
 }
 
