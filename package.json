@@ -6,8 +6,8 @@
   "main": "server.mjs",
   "scripts": {
     "prebuildui": "npm run cleanui",
-    "buildui": "cd ../parasol-insurance/app/src/main/webui && npm install && npm run build",
-    "cleanui": "rm -rf ../parasol-insurance/app/src/main/webui/node_modules ../parasol-insurance/app/src/main/webui/dist",
+    "buildui": "cd ./webui && npm install && npm run build",
+    "cleanui": "rm -rf ./webui/node_modules ./webui/dist",
     "start": "node server.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
