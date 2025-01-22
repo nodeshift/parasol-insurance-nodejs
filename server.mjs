@@ -27,7 +27,7 @@ await fastify.register(fastifyEnv, {
 });
 
 // WebUI related setup and serving
-const webuiLocation = '../parasol-insurance/app/src/main/webui/dist';
+const webuiLocation = './webui/dist';
 
 fastify.register(fastifyStatic, {
   wildcard: false,
