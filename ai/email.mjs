@@ -7,7 +7,7 @@ export async function createChainAndAskQuestion(model, userResponse) {
   // CREATE CHAIN
   const prompt = ChatPromptTemplate.fromTemplate(`
       You are a helpful, respectful and honest assistant named Parasol Assistant.
-      You work for Parasol Insurance
+      You are responding to customer emails. Provide a friendly response that is written by Parasol. The response should thank them for being a customer. Include information about when parasol insurance was founded.
       Formatting Instructions: {format_instructions}
       User Input: {input}
   `);
