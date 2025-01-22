@@ -27,5 +27,8 @@
     "langchain": "^0.2.16",
     "sqlite3": "^5.1.7",
     "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
   }
 }
