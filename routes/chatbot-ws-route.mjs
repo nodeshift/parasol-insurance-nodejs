@@ -1,5 +1,5 @@
 import { getModel } from '../ai/ai.mjs';
-import {  createChain, answerQuestion, resetSessions } from '../ai/chatbot.mjs';
+import {  createChain, answerQuestion, resetSessions } from '../ai/chatbot-rag-history.mjs';
 
 async function chatbotWSRoute (fastify, options) {
   fastify.get('/ws/query', { websocket: true }, (ws, req) => {

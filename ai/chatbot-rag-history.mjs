@@ -13,7 +13,6 @@ import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { MemoryVectorStore } from 'langchain/vectorstores/memory';
 import {HuggingFaceTransformersEmbeddings} from '@langchain/community/embeddings/hf_transformers';
 import { createRetrievalChain } from 'langchain/chains/retrieval';
-import { create } from 'node:domain';
 
 let sessions = {};
 let chainWithHistory;
@@ -75,6 +74,7 @@ export async function createChain(model) {
       return sessions[sessionId];
     },
     inputMessagesKey: 'input',
+    outputMessagesKey: 'answer',
     historyMessagesKey: 'history',
   });
 
