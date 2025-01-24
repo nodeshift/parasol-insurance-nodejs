@@ -36,7 +36,7 @@ export function createChain(model) {
 
 }
 
-export async function answerQuestion(question, sessionId) {
+export async function chat(question, sessionId) {
   const result = await chainWithHistory.stream(
     { input: createQuestion(question) },
     { configurable: { sessionId: sessionId } }
