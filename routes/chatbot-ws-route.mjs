@@ -1,5 +1,5 @@
 import { getModel } from '../ai/ai.mjs';
-import {  createChain, answerQuestion, resetSessions } from '../ai/chatbot-rag-history.mjs';
+import {  createChain, chat, resetSessions } from '../ai/chatbot-rag-history.mjs';
 
 async function chatbotWSRoute (fastify, options) {
   fastify.get('/ws/query', { websocket: true }, (ws, req) => {
@@ -29,7 +29,7 @@ async function chatbotWSRoute (fastify, options) {
       console.log('Starting to Ask', new Date());
 
       try {
-        const answerStream = await answerQuestion(JSONmessage, ws);
+        const answerStream = await chat(JSONmessage, ws);
 
         for await (const chunk of answerStream) {
           console.log(`Got Chat Response: ${chunk.answer}`);
