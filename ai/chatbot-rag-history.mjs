@@ -25,10 +25,10 @@ export async function createChain(model) {
     [ 'human', '{input}' ]
   ]);
 
-  const ragRetrievalChain = await createRagRetrieverChain(model, prompt);
+  const chain = await createRagRetrieverChain(model, prompt);
 
   chainWithHistory = new RunnableWithMessageHistory({
-    runnable: ragRetrievalChain,
+    runnable: chain,
     getMessageHistory: (sessionId) => {
       if (sessions[sessionId] === undefined) {
         sessions[sessionId] = new ChatMessageHistory();
