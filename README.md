@@ -12,12 +12,12 @@ A [Node.js](https://nodejs.org/) + [React](https://react.dev/) AI app for managi
 
 ## Configuration
 
-You can change the coordinates (host/port and other stuff) for the LLM and backend by creating a [`.env`](.env) in the root of this repo and adding the following:
+You can change the coordinates (host/port and other stuff) for the LLM and backend by creating a [`.env`](.env) in the `app` directory of this repo and adding the following:
 
 ```
 OPEN_AI_AP_KEY = 'EMPTY'
 AI_MODEL_TEMPERATURE = 0.9
-AI_MODEL_NAME = 'mistral'
+AI_MODEL_NAME = 'llama3.1'
 AI_BASE_URL = 'http://localhost:8000/v1'
 PORT = 8005
 ```
@@ -26,25 +26,9 @@ PORT = 8005
 
 First, get your inference server up and running. For example, with [InstructLab](https://github.com/instructlab/instructlab), the default after running `ilab serve` is that the server is listening on `localhost:8000`. This is the default for this app as well.
 
-The frontend and backend are in separate repositories and should be structured as follows:
-
-```
-.
-├── parasol-insurance
-└── parasol-insurance-nodejs
-```
-
-### Clone the WebUI
-
-First clone the webui from here:
-
-```
-git clone https://github.com/rh-rad-ai-roadshow/parasol-insurance.git
-```
-
 ### Build the WebUI
 
-In the Node.js Application Repo(this repo) run the `buildui` npm script
+In the `app` directory run the `buildui` npm script
 
 ```
 npm run buildui
