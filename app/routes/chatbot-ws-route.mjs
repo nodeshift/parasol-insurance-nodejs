@@ -32,12 +32,12 @@ async function chatbotWSRoute (fastify, options) {
         const answerStream = await chat(JSONmessage, ws);
 
         for await (const chunk of answerStream) {
-          console.log(`Got Chat Response: ${chunk.content}`);
+          console.log(`Got Chat Response: ${chunk.content || chunk.answer}`);
 
           //'{"type":"token","token":" Hello","source":""}'
           const formattedAnswer = {
             type: 'token',
-            token: chunk.content,
+            token: chunk.content || chunk.answer,
             source: ''
           };
 
