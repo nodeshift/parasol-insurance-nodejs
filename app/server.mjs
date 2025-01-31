@@ -49,7 +49,7 @@ fastify.register(chatbotWSRoute);
  */
 const start = async () => {
   try {
-    await fastify.listen({ port: process.env.PORT || 8005 })
+    await fastify.listen({ port: process.env.PORT || 8080, host: '0.0.0.0' })
   } catch (err) {
     fastify.log.error(err)
     process.exit(1)
